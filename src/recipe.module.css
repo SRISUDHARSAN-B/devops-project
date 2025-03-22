@@ -1,0 +1,89 @@
+/* src/recipe.module.css */
+
+/* General container styling for the recipe card */
+.recipe {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  padding: 20px;
+  max-width: 400px; /* Limits the card's width for readability */
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Hover effect to give the card some interactivity */
+.recipe:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Title styling */
+.recipe h3 {
+  font-size: 1.5rem; /* Consider using rem for responsiveness */
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Calorie text */
+.recipe p {
+  font-size: 1rem; /* Consider using rem for responsiveness */
+  color: #666;
+  margin-bottom: 10px;
+}
+
+/* Image styling with rounded corners and responsive scaling */
+.recipe img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+/* Ingredients section title */
+.recipe h4 {
+  font-size: 1.2rem; /* Consider using rem for responsiveness */
+  margin: 10px 0;
+}
+
+/* Ingredients list styling */
+.recipe ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.recipe li {
+  font-size: 1rem; /* Consider using rem for responsiveness */
+  color: #444;
+  margin: 5px 0;
+}
+
+/* Button styling */
+.recipe button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Disabled button styling */
+.recipe button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+/* Button hover effect */
+.recipe button:hover:enabled {
+  background-color: #0056b3;
+}
+
+/* Button focus effect for accessibility */
+.recipe button:focus {
+  outline: 2px solid #0056b3; /* Outline for focus state */
+  outline-offset: 2px; /* Adds space between the outline and the button */
+}
