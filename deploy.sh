@@ -1,16 +1,18 @@
 #!/bin/bash
 
-# Variables
-IMAGE_NAME="srisudharsan1b/testops"
-IMAGE_TAG="latest"
-REGISTRY="docker.io"
-REPO="srisudharsan1b"
-DOCKER_IMAGE="${REGISTRY}/${REPO}/${IMAGE_NAME}:${IMAGE_TAG}"
+# Stop script execution if an error occurs
+set -e
 
-# Pull the Docker image from the registry
-echo "Pulling image ${DOCKER_IMAGE}..."
-docker pull ${DOCKER_IMAGE}
+echo "Deploying the application..."
 
-# Run the container (You may need to update this for your environment, e.g., Kubernetes or other orchestrators)
-echo "Running the container..."
-docker run -d -p 3000:3000 --name ${IMAGE_NAME} ${DOCKER_IMAGE}
+# Pull the latest Docker image
+docker pull srisudharsan1b/testops:latest
+
+# Stop and remove the existing container if it exists
+docker stop your-app || true
+docker rm your-app || true
+
+# Run the new container
+docker run -d --name your-app -p 3000:3000 srisudharsan1b/testops
+
+echo "Deployment completed successfully!"
