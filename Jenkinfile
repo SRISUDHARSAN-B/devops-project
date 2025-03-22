@@ -16,24 +16,28 @@ pipeline {
 
         stage('Ensure Node.js Installed') {
             steps {
-                echo 'Checking if Node.js and npm are installed...'
-                sh '''
-                if ! command -v node &> /dev/null; then
-                    echo "Node.js is not installed. Installing..."
-                    curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-                    sudo apt-get install -y nodejs
-                else
-                    echo "Node.js is already installed."
-                fi
-                '''
+                script {
+                    def nodeInstalled = sh(script: 'command -v node', returnStatus: true) == 0
+                    if (!nodeInstalled) {
+                        echo 'Node.js is not installed. Installing...'
+                        sh '''
+                        curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+                        sudo apt-get install -y nodejs
+                        '''
+                    } else {
+                        echo 'Node.js is already installed.'
+                    }
+                }
             }
         }
 
         stage('Build') {
             steps {
                 echo 'Running build script...'
-                sh 'chmod +x build.sh'  // Ensure the script is executable
-                sh './build.sh'
+                sh '''
+                chmod +x build.sh  # Ensure the script is executable
+                ./build.sh || { echo "Build failed!"; exit 1; }
+                '''
             }
         }
 
@@ -42,12 +46,11 @@ pipeline {
                 script {
                     def dockerTag = "${IMAGE_NAME}:${env.BUILD_NUMBER}"  // Use Jenkins build number as tag
                     echo "Building Docker image: ${dockerTag}"
-
+                    
                     // Build Docker image
                     sh "docker build -t ${dockerTag} ."
-
+                    
                     echo "Pushing Docker image: ${dockerTag}"
-                    // Push Docker image to Docker Hub
                     withDockerRegistry([credentialsId: DOCKER_CREDENTIALS_ID, url: 'https://index.docker.io/v1/']) {
                         sh "docker push ${dockerTag}"
                     }
@@ -58,8 +61,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Running deployment script...'
-                sh 'chmod +x deploy.sh'  // Ensure the script is executable
-                sh './deploy.sh'
+                sh '''
+                chmod +x deploy.sh  # Ensure the script is executable
+                ./deploy.sh || { echo "Deployment failed!"; exit 1; }
+                '''
             }
         }
     }
